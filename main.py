@@ -4,6 +4,8 @@ from tkinter import ttk
 
 from PIL import Image, ImageTk
 
+import random
+
 # cores --------------------------------
 co0 = "#FFFFFF"  # white / branca
 co1 = "#333333"  # black / preta
@@ -56,26 +58,64 @@ app_2_linha.place(x=255, y=0)
 app_linha = Label(frame_cima, text='', width=255, anchor='center', font=('Ivy 1 bold'), bg=co0, fg=co0)
 app_linha.place(x=0, y=95)
 
-#configurando o frame_baixo
-icon_1 = Image.open('images/pedra.png')
-icon_1 = icon_1.resize((50, 50), Image.ANTIALIAS)
-icon_1 = ImageTk.PhotoImage(icon_1)
-b_icon_1 = Button(frame_baixo, width=50, image=icon_1, compound=CENTER, bg=co0, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=FLAT)
-b_icon_1.place(x=15, y=60)
+global voce
+global pc
+global rondas
+global pontos_voce
+global pontos_pc
 
-icon_2 = Image.open('images/papel.png')
-icon_2 = icon_2.resize((50, 50), Image.ANTIALIAS)
-icon_2 = ImageTk.PhotoImage(icon_2)
-b_icon_2 = Button(frame_baixo, width=50, image=icon_2, compound=CENTER, bg=co0, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=FLAT)
-b_icon_2.place(x=95, y=60)
+pontos_voce = 0
+pontos_pc = 0
+rondas = 5
 
-icon_3 = Image.open('images/tesoura.png')
-icon_3 = icon_3.resize((50, 50), Image.ANTIALIAS)
-icon_3 = ImageTk.PhotoImage(icon_3)
-b_icon_3 = Button(frame_baixo, width=50, image=icon_3, compound=CENTER, bg=co0, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=FLAT)
-b_icon_3.place(x=170, y=60)
+#funcao logica do jogo
 
-b_jogar = Button(frame_baixo, width=30, text='Jogar', bg=fundo, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=RAISED, overrelief=RIDGE)
+def jogar(i):
+    global rondas
+    global pontos_voce
+    global pontos_pc
+
+    if rondas > 0:
+        print(rondas)
+        opcoes = ['pedra', 'papel', 'tesoura']
+        pc = random.choice(opcoes)
+        voce = i
+    else:
+        fim_do_jogo()
+
+#funcao iniciar jogo
+
+def iniciar_jogo():
+    global icon_1
+    global icon_2
+    global icon_3
+    global b_icon_1
+    global b_icon_2
+    global b_icon_3
+
+    icon_1 = Image.open('images/pedra.png')
+    icon_1 = icon_1.resize((50, 50), Image.ANTIALIAS)
+    icon_1 = ImageTk.PhotoImage(icon_1)
+    b_icon_1 = Button(frame_baixo, width=50, image=icon_1, compound=CENTER, bg=co0, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=FLAT)
+    b_icon_1.place(x=15, y=60)
+
+    icon_2 = Image.open('images/papel.png')
+    icon_2 = icon_2.resize((50, 50), Image.ANTIALIAS)
+    icon_2 = ImageTk.PhotoImage(icon_2)
+    b_icon_2 = Button(frame_baixo, width=50, image=icon_2, compound=CENTER, bg=co0, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=FLAT)
+    b_icon_2.place(x=95, y=60)
+
+    icon_3 = Image.open('images/tesoura.png')
+    icon_3 = icon_3.resize((50, 50), Image.ANTIALIAS)
+    icon_3 = ImageTk.PhotoImage(icon_3)
+    b_icon_3 = Button(frame_baixo, width=50, image=icon_3, compound=CENTER, bg=co0, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=FLAT)
+    b_icon_3.place(x=170, y=60)
+
+#funcao terminar o jogo
+def fim_do_jogo():
+    pass
+
+b_jogar = Button(frame_baixo, command=iniciar_jogo, width=30, text='Jogar', bg=fundo, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=RAISED, overrelief=RIDGE)
 b_jogar.place(x=5, y=151)
 
 janela.mainloop()
