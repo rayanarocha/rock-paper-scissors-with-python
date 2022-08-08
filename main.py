@@ -58,6 +58,12 @@ app_2_linha.place(x=255, y=0)
 app_linha = Label(frame_cima, text='', width=255, anchor='center', font=('Ivy 1 bold'), bg=co0, fg=co0)
 app_linha.place(x=0, y=95)
 
+app_vc = Label(frame_baixo, text='', height=1, anchor='center', font=('Ivy 10 bold'), bg=co0, fg=co0)
+app_vc.place(x=20, y=10)
+
+app_pc = Label(frame_baixo, text='', height=1, anchor='center', font=('Ivy 10 bold'), bg=co0, fg=co0)
+app_pc.place(x=190, y=10)
+
 global voce
 global pc
 global rondas
@@ -80,6 +86,12 @@ def jogar(i):
         opcoes = ['Pedra', 'Papel', 'Tesoura']
         pc = random.choice(opcoes)
         voce = i
+
+        app_vc['text'] = voce
+        app_vc['fg'] = co1
+        app_pc['text'] = pc
+        app_pc['fg'] = co1
+
         print(voce, pc)
         if voce == 'Pedra' and pc == 'Pedra' or voce == 'Papel' and pc == 'Papel' or voce == 'Tesoura' and pc == 'Tesoura':
             print('empate')
@@ -87,12 +99,29 @@ def jogar(i):
             app_2_linha['bg'] = co0
             app_linha['bg'] = co3
 
-        elif voce == 'Pedra' and pc == 'Papel':
+        elif voce == 'Pedra' and pc == 'Papel' or voce == 'Papel' and pc == 'Tesoura' or voce == 'Tesoura' and pc == 'Pedra':
             print('PC ganhou')
             app_1_linha['bg'] = co0
             app_2_linha['bg'] = co4
             app_linha['bg'] = co0
+            pontos_pc += 10
+
+        elif voce == 'Papel' and pc == 'Pedra' or voce == 'Tesoura' and pc == 'Papel' or voce == 'Pedra' and pc == 'Tesoura':
+            print('Você ganhou')
+            app_1_linha['bg'] = co4
+            app_2_linha['bg'] = co0
+            app_linha['bg'] = co0
+            pontos_voce += 10
+
+        app_1_pontos['text'] = pontos_voce
+        app_2_pontos['text'] = pontos_pc
+
+        rondas -= 1
     else:
+
+        app_1_pontos['text'] = pontos_voce
+        app_2_pontos['text'] = pontos_pc
+
         fim_do_jogo()
 
 #funcao iniciar jogo
@@ -104,6 +133,8 @@ def iniciar_jogo():
     global b_icon_1
     global b_icon_2
     global b_icon_3
+
+    b_jogar.destroy()
 
     icon_1 = Image.open('images/pedra.png')
     icon_1 = icon_1.resize((50, 50), Image.ANTIALIAS)
@@ -125,7 +156,40 @@ def iniciar_jogo():
 
 #funcao terminar o jogo
 def fim_do_jogo():
-    pass
+    global rondas
+    global pontos_voce
+    global pontos_pc
+
+    pontos_voce, pontos_pc = 0, 0
+    rondas = 5
+
+    b_icon_1.destroy()
+    b_icon_2.destroy()
+    b_icon_3.destroy()
+
+    jogador_voce = int(app_1_pontos['text'])
+    jogador_pc = int(app_2_pontos['text'])
+
+    if jogador_voce > jogador_pc:
+        app_vencedor = Label(frame_baixo, text='Parabéns, você ganhou!', height=1, anchor='center', font=('Ivy 10 bold'), bg=co0, fg=co4)
+        app_vencedor.place(x=5, y=60)
+    elif jogador_voce < jogador_pc:
+        app_vencedor = Label(frame_baixo, text='Você perdeu!!', height=1, anchor='center', font=('Ivy 10 bold'), bg=co0, fg=co5)
+        app_vencedor.place(x=5, y=60)
+    else:
+        app_vencedor = Label(frame_baixo, text='Empate', height=1, anchor='center', font=('Ivy 10 bold'), bg=co0, fg=co2)
+        app_vencedor.place(x=5, y=60)
+
+    def jogar_denovo():
+        app_1_pontos['text'] = '0'
+        app_2_pontos['text'] = '0'
+        app_vencedor.destroy()
+
+        b_jogar_denovo.destroy()
+        iniciar_jogo()
+
+    b_jogar_denovo = Button(frame_baixo, command=jogar_denovo, width=30, text='Jogar de novo', bg=fundo, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=RAISED, overrelief=RIDGE)
+    b_jogar_denovo.place(x=5, y=151)
 
 b_jogar = Button(frame_baixo, command=iniciar_jogo, width=30, text='Jogar', bg=fundo, fg=co0, font=('Ivy 10 bold'), anchor=CENTER, relief=RAISED, overrelief=RIDGE)
 b_jogar.place(x=5, y=151)
